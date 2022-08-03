@@ -16,7 +16,7 @@ In order to train the car better we need the GENETIC ALGORITHM.
 #
 Program Logic:
 
-50 random cards are generated that has a random neural network (each interprete the sensory data in a different way and do random stuff)
+50 random cars are generated that has a random neural network (each interprete the sensory data in a different way and do random stuff)
 When a car "dies" meaning in hit an obsticle, we select the ones that did the best and we combine (morph) them together in order to 
 create a slightly more efficient car.
 #
