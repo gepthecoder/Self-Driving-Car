@@ -32,6 +32,9 @@ public class CarController : MonoBehaviour
     [SerializeField] private float m_AvarageSpeedMulti = 0.2f;
     [Tooltip("How important it is to stay in the middle of the track?")]
     [SerializeField] private float m_SensorMulti = 0.1f;
+    [Space(10)]
+    [Tooltip("Beast")]
+    [SerializeField] private float m_ChadVal = 2500;
 
     private Vector3 m_StartPosition; private Vector3 m_StartRotation;
     private Vector3 m_LastPosition;
@@ -71,6 +74,9 @@ public class CarController : MonoBehaviour
 
     private void Reset()
     {
+        // TEST
+        m_NNetwork.Init(m_Layers, m_Neurons);
+
         m_TimeSinceStart = 0f;
         m_TotalDistanceTravelled = 0f;
         m_AvarageSpeed = 0f;
@@ -114,7 +120,7 @@ public class CarController : MonoBehaviour
             Reset();
         }
 
-        if(m_OverallFitness >= 1000) { // DID TO GOOD (at least 3 Laps)    
+        if(m_OverallFitness >= m_ChadVal) { // DID TO GOOD (at least 3 Laps)    
             // TODO: Save network to a JSON
             Reset(); 
         }
