@@ -5,17 +5,25 @@ using UnityEngine;
 public class CarController : MonoBehaviour
 {
     [Header("C A R  A I  C O R E")]
+    [Space(50)]
+    [SerializeField] private NeuralNetwork m_NNetwork;
+    [Space(10)]
+    [Header("Network Options")]
+    [SerializeField] private int m_Layers = 1;
+    [SerializeField] private int m_Neurons = 10;
+    [Space(50)]
+    [Header("Outputs")]
     [Space(10)]
     [Range(-1, 1)]
     [SerializeField] private float m_Acceleration;
     [Range(-1, 1)]
     [SerializeField] private float m_Steering;
-
+    [Space(50)]
+    [Header("Hidden Layer Options")]
+    [Space(10)]
     [Tooltip("Sensor Value Output Needs To Be Between 0-1")]
     [SerializeField] private int m_NormalizedFactor = 20;
-
     [SerializeField] private float m_TimeSinceStart = 0f; // checking for idle cars / usless cars -> Reset
-
     [Header("Fitness -> How Far? How Fast? Whats Valuable? Gives importance to each factor. Example: If the two cars go the exact same distance, how do we differentiate which one is better?")]
     [SerializeField] private float m_OverallFitness;
     [Tooltip("How important is the DISTANCE to the fitness function? Distance * this.multi")]
@@ -40,6 +48,9 @@ public class CarController : MonoBehaviour
     {
         m_StartPosition = transform.position;
         m_StartRotation = transform.eulerAngles;
+
+        // TEST
+        m_NNetwork.Init(m_Layers, m_Neurons);
     }
 
     private void FixedUpdate()
@@ -47,14 +58,15 @@ public class CarController : MonoBehaviour
         SensorObservance();
         m_LastPosition = transform.position;
 
-        // TODO: assign these two parameters via Neural Net
+        (m_Acceleration, m_Steering) = m_NNetwork.RunNetwork(left_Sensor, forward_Sensor, right_Sensor);
+
         MoveCar(m_Acceleration, m_Steering);
 
         m_TimeSinceStart += Time.deltaTime;
 
         CalculateFitnessModel();
 
-        // TOOD: reset A & S
+        ResetOutputs();
     }
 
     private void Reset()
@@ -120,7 +132,7 @@ public class CarController : MonoBehaviour
 
         if(Physics.Raycast(ray, out rayHit)) {
             right_Sensor = rayHit.distance / m_NormalizedFactor; // NORMALs
-            print($"Right: {right_Sensor}");
+            //print($"Right: {right_Sensor}");
             Debug.DrawLine(ray.origin, rayHit.point, Color.red);
         }
 
@@ -128,7 +140,7 @@ public class CarController : MonoBehaviour
         if (Physics.Raycast(ray, out rayHit))
         {
             forward_Sensor = rayHit.distance / m_NormalizedFactor; // NORMALs
-            print($"Forward: {forward_Sensor}");
+            //print($"Forward: {forward_Sensor}");
             Debug.DrawLine(ray.origin, rayHit.point, Color.red);
         }
 
@@ -136,8 +148,14 @@ public class CarController : MonoBehaviour
         if (Physics.Raycast(ray, out rayHit))
         {
             left_Sensor = rayHit.distance / m_NormalizedFactor; // NORMALs
-            print($"Left: {left_Sensor }");
+            //print($"Left: {left_Sensor }");
             Debug.DrawLine(ray.origin, rayHit.point, Color.red);
         }
+    }
+
+    private void ResetOutputs()
+    {
+        m_Acceleration = 0;
+        m_Steering = 0;
     }
 }

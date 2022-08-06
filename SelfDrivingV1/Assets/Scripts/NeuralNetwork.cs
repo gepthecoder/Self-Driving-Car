@@ -30,9 +30,9 @@ public class NeuralNetwork : MonoBehaviour
 
             // Weights => Connect weights from previous layer to the current layer 
 
-            if(i == 1) // INPUT LAYER
+            if(i == 0) // INPUT LAYER
             {
-                Matrix<float> inputToH1 = Matrix<float>.Build.Dense(3, hiddenLayerCount);
+                Matrix<float> inputToH1 = Matrix<float>.Build.Dense(3, hiddenNeuronCount);
                 m_Weights.Add(inputToH1);
             }
 
@@ -69,7 +69,7 @@ public class NeuralNetwork : MonoBehaviour
         m_OutputLayer = ((m_HiddenLayers[m_HiddenLayers.Count - 1] * m_Weights[m_Weights.Count - 1]) + m_Biases[m_Biases.Count - 1]).PointwiseTanh();
 
         // First output is ACCELERATION, second one is STEERING
-        return (Sigmoid(m_OutputLayer[0,0]), (float)Math.Tanh(m_OutputLayer[0, 1]));
+        return (Sigmoid(m_OutputLayer[0, 0]), (float)Math.Tanh(m_OutputLayer[0, 1]));
     }
 
     private float Sigmoid(float x) // Curve between 0 & 1

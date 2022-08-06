@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2410464185963192274}
   - component: {fileID: 2410464185968377545}
   - component: {fileID: 2038816378605849537}
+  - component: {fileID: 7266848664540268770}
   m_Layer: 0
   m_Name: Car
   m_TagString: Untagged
@@ -80,6 +81,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e52d5a764f99e3439714487c758f2ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_NNetwork: {fileID: 7266848664540268770}
+  m_Layers: 1
+  m_Neurons: 10
   m_Acceleration: 0
   m_Steering: 0
   m_NormalizedFactor: 45
@@ -88,6 +92,20 @@ MonoBehaviour:
   m_DistanceMultiplier: 1.4
   m_AvarageSpeedMulti: 0.2
   m_SensorMulti: 0.1
+--- !u!114 &7266848664540268770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2410464185968377546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c9e4a8bea470b5448c3fbdc0b3cfc21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Biases: []
+  m_Fitness: 0
 --- !u!1 &2410464185968377584
 GameObject:
   m_ObjectHideFlags: 0
