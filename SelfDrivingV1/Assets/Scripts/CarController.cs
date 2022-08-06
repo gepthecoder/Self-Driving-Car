@@ -11,6 +11,9 @@ public class CarController : MonoBehaviour
     [Range(-1, 1)]
     [SerializeField] private float m_Steering;
 
+    [Tooltip("Sensor Value Output Needs To Be Between 0-1")]
+    [SerializeField] private int m_NormalizedFactor = 20;
+
     [SerializeField] private float m_TimeSinceStart = 0f; // checking for idle cars / usless cars -> Reset
 
     [Header("Fitness -> How Far? How Fast? Whats Valuable? Gives importance to each factor. Example: If the two cars go the exact same distance, how do we differentiate which one is better?")]
@@ -19,6 +22,8 @@ public class CarController : MonoBehaviour
     [SerializeField] private float m_DistanceMultiplier = 1.4f;
     [Tooltip("How important is the SPEED to the fitness function?")]
     [SerializeField] private float m_AvarageSpeedMulti = 0.2f;
+    [Tooltip("How important it is to stay in the middle of the track?")]
+    [SerializeField] private float m_SensorMulti = 0.1f;
 
     private Vector3 m_StartPosition; private Vector3 m_StartRotation;
     private Vector3 m_LastPosition;
@@ -31,12 +36,25 @@ public class CarController : MonoBehaviour
 
     private Vector3 m_Input;
 
-    private const int c_NormalizedFactor = 20;
-
     private void Awake()
     {
         m_StartPosition = transform.position;
         m_StartRotation = transform.eulerAngles;
+    }
+
+    private void FixedUpdate()
+    {
+        SensorObservance();
+        m_LastPosition = transform.position;
+
+        // TODO: assign these two parameters via Neural Net
+        MoveCar(m_Acceleration, m_Steering);
+
+        m_TimeSinceStart += Time.deltaTime;
+
+        CalculateFitnessModel();
+
+        // TOOD: reset A & S
     }
 
     private void Reset()
@@ -67,6 +85,30 @@ public class CarController : MonoBehaviour
         transform.eulerAngles += new Vector3(0, (horizontal * 90) * .02f, 0);
     }
 
+    private void CalculateFitnessModel()
+    {
+        // every frame we set last position to our current position
+        // NOT exact distance BUT a metric to compare each car with eachother
+        m_TotalDistanceTravelled += Vector3.Distance(transform.position, m_LastPosition);
+        m_AvarageSpeed = m_TotalDistanceTravelled / m_TimeSinceStart;
+
+
+        m_OverallFitness = (m_TotalDistanceTravelled * m_DistanceMultiplier)    + 
+                            (m_AvarageSpeed * m_AvarageSpeedMulti)              + 
+                                (((right_Sensor + forward_Sensor + left_Sensor) / 3) * m_SensorMulti);
+
+        // DUMB / SMART ??
+        if (m_TimeSinceStart > 20 && m_OverallFitness < 40) { // NOT DOIN ANYTHING
+            Reset();
+        }
+
+        if(m_OverallFitness >= 1000) { // DID TO GOOD (at least 3 Laps)    
+            // TODO: Save network to a JSON
+            Reset(); 
+        }
+    }
+
+
     private void SensorObservance()
     {
         Vector3 rightDiagonal = transform.forward + transform.right;
@@ -77,21 +119,21 @@ public class CarController : MonoBehaviour
         RaycastHit rayHit;
 
         if(Physics.Raycast(ray, out rayHit)) {
-            right_Sensor = rayHit.distance / c_NormalizedFactor; // NORMALs
+            right_Sensor = rayHit.distance / m_NormalizedFactor; // NORMALs
             print($"Right: {right_Sensor}");
         }
 
         ray.direction = forward;
         if (Physics.Raycast(ray, out rayHit))
         {
-            forward_Sensor = rayHit.distance / c_NormalizedFactor; // NORMALs
+            forward_Sensor = rayHit.distance / m_NormalizedFactor; // NORMALs
             print($"Forward: {forward_Sensor}");
         }
 
         ray.direction = leftDiagonal;
         if (Physics.Raycast(ray, out rayHit))
         {
-            left_Sensor = rayHit.distance / c_NormalizedFactor; // NORMALs
+            left_Sensor = rayHit.distance / m_NormalizedFactor; // NORMALs
             print($"Left: {left_Sensor }");
         }
     }
