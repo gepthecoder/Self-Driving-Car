@@ -121,6 +121,7 @@ public class CarController : MonoBehaviour
         if(Physics.Raycast(ray, out rayHit)) {
             right_Sensor = rayHit.distance / m_NormalizedFactor; // NORMALs
             print($"Right: {right_Sensor}");
+            Debug.DrawLine(ray.origin, rayHit.point, Color.red);
         }
 
         ray.direction = forward;
@@ -128,6 +129,7 @@ public class CarController : MonoBehaviour
         {
             forward_Sensor = rayHit.distance / m_NormalizedFactor; // NORMALs
             print($"Forward: {forward_Sensor}");
+            Debug.DrawLine(ray.origin, rayHit.point, Color.red);
         }
 
         ray.direction = leftDiagonal;
@@ -135,8 +137,7 @@ public class CarController : MonoBehaviour
         {
             left_Sensor = rayHit.distance / m_NormalizedFactor; // NORMALs
             print($"Left: {left_Sensor }");
+            Debug.DrawLine(ray.origin, rayHit.point, Color.red);
         }
     }
-
-
 }
