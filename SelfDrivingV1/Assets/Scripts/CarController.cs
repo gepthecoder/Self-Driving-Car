@@ -9,7 +9,7 @@ public class CarController : MonoBehaviour
     [Range(-1, 1)]
     [SerializeField] private float m_Acceleration;
     [Range(-1, 1)]
-    [SerializeField] private float m_TurningVal;
+    [SerializeField] private float m_Steering;
 
     [SerializeField] private float m_TimeSinceStart = 0f; // checking for idle cars / usless cars -> Reset
 
@@ -27,7 +27,11 @@ public class CarController : MonoBehaviour
     private float m_AvarageSpeed;
 
     // Distance Between The Origin Ray To The Position The Ray Hit The Wall
-    private float a_Sensor, b_Sensor, c_Sensor;
+    private float right_Sensor, left_Sensor, forward_Sensor;
+
+    private Vector3 m_Input;
+
+    private const int c_NormalizedFactor = 20;
 
     private void Awake()
     {
@@ -47,8 +51,50 @@ public class CarController : MonoBehaviour
         transform.eulerAngles = m_StartRotation;
     }
 
+    public void OnCollisionEnter(Collision collision)
+    {
+        Reset();
+    }
 
+    public void MoveCar(float vertical, float horizontal)
+    {
+        // Position & Direction
+        m_Input = Vector3.Lerp(Vector3.zero, new Vector3(0,0,vertical*11.4f), .02f);
+        m_Input = transform.TransformDirection(m_Input);
+        transform.position += m_Input;
 
+        // Rotation
+        transform.eulerAngles += new Vector3(0, (horizontal * 90) * .02f, 0);
+    }
+
+    private void SensorObservance()
+    {
+        Vector3 rightDiagonal = transform.forward + transform.right;
+        Vector3 forward = transform.forward;
+        Vector3 leftDiagonal = transform.forward - transform.right;
+
+        Ray ray = new Ray(transform.position, rightDiagonal);
+        RaycastHit rayHit;
+
+        if(Physics.Raycast(ray, out rayHit)) {
+            right_Sensor = rayHit.distance / c_NormalizedFactor; // NORMALs
+            print($"Right: {right_Sensor}");
+        }
+
+        ray.direction = forward;
+        if (Physics.Raycast(ray, out rayHit))
+        {
+            forward_Sensor = rayHit.distance / c_NormalizedFactor; // NORMALs
+            print($"Forward: {forward_Sensor}");
+        }
+
+        ray.direction = leftDiagonal;
+        if (Physics.Raycast(ray, out rayHit))
+        {
+            left_Sensor = rayHit.distance / c_NormalizedFactor; // NORMALs
+            print($"Left: {left_Sensor }");
+        }
+    }
 
 
 }
