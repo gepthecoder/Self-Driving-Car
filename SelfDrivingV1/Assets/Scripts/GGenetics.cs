@@ -67,4 +67,19 @@ public class GGenetics : MonoBehaviour
             startingIndex++;
         }
     }
+
+    public void Death(float fitness, NeuralNetwork nNet)
+    {
+        if(m_CurrentGenome < m_Population.Length - 1)
+        {
+            m_Population[m_CurrentGenome].SetFitness(fitness);
+
+            // Go To Next Car In Out Current Generation
+            m_CurrentGenome++;
+            ResetToCurrentGenome();
+        } else
+        {
+            // Repopulate
+        }
+    }
 }

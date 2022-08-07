@@ -91,6 +91,8 @@ public class NeuralNetwork : MonoBehaviour
         }
     }
 
+    public void SetFitness(float val) { m_Fitness = val; }
+
     private void ClearData()
     {
         m_InputLayer.Clear();

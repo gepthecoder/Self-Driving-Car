@@ -83,7 +83,7 @@ public class CarController : MonoBehaviour
 
     public void OnCollisionEnter(Collision collision)
     {
-        Reset();
+        Death();
     }
 
     public void MoveCar(float vertical, float horizontal)
@@ -111,12 +111,12 @@ public class CarController : MonoBehaviour
 
         // DUMB / SMART ??
         if (m_TimeSinceStart > 20 && m_OverallFitness < 40) { // NOT DOIN ANYTHING
-            Reset();
+            Death();
         }
 
-        if(m_OverallFitness >= m_ChadVal) { // DID TO GOOD (at least 3 Laps)    
+        if (m_OverallFitness >= m_ChadVal) { // DID TO GOOD (at least 3 Laps)    
             // TODO: Save network to a JSON
-            Reset(); 
+            Death();
         }
     }
 
@@ -157,6 +157,11 @@ public class CarController : MonoBehaviour
     {
         m_NNetwork = nnet;
         Reset();
+    }
+
+    private void Death()
+    {
+        GameObject.FindObjectOfType<GGenetics>().Death(m_OverallFitness, m_NNetwork);
     }
 
     public int GetNNetworkLayersCount() { return m_Layers; }
