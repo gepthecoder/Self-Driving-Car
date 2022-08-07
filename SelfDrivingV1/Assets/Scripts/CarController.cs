@@ -51,9 +51,6 @@ public class CarController : MonoBehaviour
     {
         m_StartPosition = transform.position;
         m_StartRotation = transform.eulerAngles;
-
-        // TEST
-        m_NNetwork.Init(m_Layers, m_Neurons);
     }
 
     private void FixedUpdate()
@@ -74,9 +71,6 @@ public class CarController : MonoBehaviour
 
     private void Reset()
     {
-        // TEST
-        m_NNetwork.Init(m_Layers, m_Neurons);
-
         m_TimeSinceStart = 0f;
         m_TotalDistanceTravelled = 0f;
         m_AvarageSpeed = 0f;
@@ -158,6 +152,15 @@ public class CarController : MonoBehaviour
             Debug.DrawLine(ray.origin, rayHit.point, Color.red);
         }
     }
+
+    public void ResetWithNNetwork(NeuralNetwork nnet)
+    {
+        m_NNetwork = nnet;
+        Reset();
+    }
+
+    public int GetNNetworkLayersCount() { return m_Layers; }
+    public int GetNNetworkNeuronsCount() { return m_Neurons; }
 
     private void ResetOutputs()
     {
