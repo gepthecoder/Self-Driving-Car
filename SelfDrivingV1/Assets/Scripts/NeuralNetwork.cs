@@ -92,6 +92,7 @@ public class NeuralNetwork : MonoBehaviour
     }
 
     public void SetFitness(float val) { m_Fitness = val; }
+    public float GetFitness() { return m_Fitness; }
 
     private void ClearData()
     {

@@ -82,4 +82,32 @@ public class GGenetics : MonoBehaviour
             // Repopulate
         }
     }
+
+    private void Repopulate()
+    {
+        m_GGenPool.Clear();
+
+        m_CurrentGeneration++;
+        m_NaturallySelected = 0;
+
+        // sort the population by fitness (the higher the fitness the higher on the ggen pool)
+
+        SortPopulation();
+    }
+
+    private void SortPopulation()
+    {
+        for (int i = 0; i < m_Population.Length; i++)
+        {
+            for (int j = i; j < m_Population.Length; j++)
+            {
+                if(m_Population[i].GetFitness() < m_Population[j].GetFitness())
+                {
+                    NeuralNetwork temp = m_Population[i];
+                    m_Population[i] = m_Population[j];
+                    m_Population[j] = temp;
+                }
+            }
+        }
+    }
 }
