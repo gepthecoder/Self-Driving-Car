@@ -132,7 +132,7 @@ public class GGenetics : MonoBehaviour
             child1.SetFitness(0);
             child2.SetFitness(0);
 
-            // Swap over the entire weights of matrices
+            // Swap over the entire WEIGHTS of matrices
             for (int k = 0; k < child1.GetWeights().Count; k++)
             {
                 if(Random.Range(0.0f, 1.0f) < 0.5f)
@@ -146,6 +146,27 @@ public class GGenetics : MonoBehaviour
                     child1.GetWeights()[k] = m_Population[secondParentIndex].GetWeights()[k];
                 }
             }
+
+            // Swap over the entire BIASES of matrices
+            for (int k = 0; k < child1.GetBiases().Count; k++)
+            {
+                if (Random.Range(0.0f, 1.0f) < 0.5f)
+                {
+                    child1.GetBiases()[k] = m_Population[firstParentIndex].GetBiases()[k];
+                    child2.GetBiases()[k] = m_Population[secondParentIndex].GetBiases()[k];
+                }
+                else
+                {
+                    child2.GetBiases()[k] = m_Population[firstParentIndex].GetBiases()[k];
+                    child1.GetBiases()[k] = m_Population[secondParentIndex].GetBiases()[k];
+                }
+            }
+
+            nNet[m_NaturallySelected] = child1;
+            m_NaturallySelected++;
+
+            nNet[m_NaturallySelected] = child2;
+            m_NaturallySelected++;
         }
     }
     private void MutatePopulation(NeuralNetwork[] nNet)

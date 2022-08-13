@@ -141,6 +141,8 @@ public class NeuralNetwork : MonoBehaviour
     public List<Matrix<float>> GetWeights() { return m_Weights; }
     public void SetWeights(List<Matrix<float>> weights) { m_Weights = weights; }
 
+    public List<float> GetBiases() { return m_Biases; }
+
     private void ClearData()
     {
         m_InputLayer.Clear();
