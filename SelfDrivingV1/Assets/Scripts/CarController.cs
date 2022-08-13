@@ -69,6 +69,8 @@ public class CarController : MonoBehaviour
         m_TotalDistanceTravelled = 0f;
         m_AvarageSpeed = 0f;
         m_OverallFitness = 0f;
+        UiManager.instance.SetOverallFitnessText(m_OverallFitness.ToString());
+        UiManager.instance.SetSpeedText(m_AvarageSpeed.ToString());
 
         m_LastPosition = m_StartPosition;
         transform.position = m_StartPosition;
@@ -82,6 +84,8 @@ public class CarController : MonoBehaviour
 
     public void MoveCar(float vertical, float horizontal)
     {
+        UiManager.instance.SetAccelerationText(vertical.ToString());
+        UiManager.instance.SetSteeringText(horizontal.ToString());
         // Position & Direction
         m_Input = Vector3.Lerp(Vector3.zero, new Vector3(0,0,vertical*11.4f), .02f);
         m_Input = transform.TransformDirection(m_Input);
@@ -102,6 +106,10 @@ public class CarController : MonoBehaviour
         m_OverallFitness = (m_TotalDistanceTravelled * m_DistanceMultiplier)    + 
                             (m_AvarageSpeed * m_AvarageSpeedMulti)              + 
                                 (((right_Sensor + forward_Sensor + left_Sensor) / 3) * m_SensorMulti);
+
+
+        UiManager.instance.SetOverallFitnessText(m_OverallFitness.ToString());
+        UiManager.instance.SetSpeedText(m_AvarageSpeed.ToString());
 
         // DUMB / SMART ??
         if (m_TimeSinceStart > 20 && m_OverallFitness < 40) { // NOT DOIN ANYTHING
@@ -165,5 +173,6 @@ public class CarController : MonoBehaviour
     {
         m_Acceleration = 0;
         m_Steering = 0;
+
     }
 }

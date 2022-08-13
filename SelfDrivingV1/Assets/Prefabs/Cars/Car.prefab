@@ -92,6 +92,7 @@ MonoBehaviour:
   m_DistanceMultiplier: 1.4
   m_AvarageSpeedMulti: 0.2
   m_SensorMulti: 0.1
+  m_ChadVal: 2500
 --- !u!114 &7266848664540268770
 MonoBehaviour:
   m_ObjectHideFlags: 0

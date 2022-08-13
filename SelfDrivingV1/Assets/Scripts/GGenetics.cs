@@ -87,6 +87,7 @@ public class GGenetics : MonoBehaviour
             m_Population[m_CurrentGenome].SetFitness(fitness);
 
             m_CurrentGenome++;
+            UiManager.instance.SetCurrentGenomeText(m_CurrentGenome.ToString());
             ResetToCurrentGenome();
         } else
         {
@@ -103,6 +104,8 @@ public class GGenetics : MonoBehaviour
         m_GGenPool.Clear();
 
         m_CurrentGeneration++;
+        UiManager.instance.SetCurrentGenerationText(m_CurrentGeneration.ToString());
+
         m_NaturallySelected = 0;
 
         SortPopulation();
@@ -117,6 +120,8 @@ public class GGenetics : MonoBehaviour
         m_Population = nNet;
 
         m_CurrentGenome = 0;
+        UiManager.instance.SetCurrentGenomeText(m_CurrentGenome.ToString());
+
         ResetToCurrentGenome();
     }
 
