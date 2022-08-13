@@ -72,6 +72,50 @@ public class NeuralNetwork : MonoBehaviour
         return (Sigmoid(m_OutputLayer[0, 0]), (float)Math.Tanh(m_OutputLayer[0, 1]));
     }
 
+    public NeuralNetwork InitializeCopy(int hiddenLayerCount, int hiddenNeuronCount)
+    {
+        NeuralNetwork nNet = new NeuralNetwork();
+        List<Matrix<float>> newWeights = new List<Matrix<float>>();
+
+        for (int i = 0; i < this.m_Weights.Count; i++)
+        {
+            Matrix<float> currentWeight = Matrix<float>.Build.Dense(m_Weights[i].RowCount, m_Weights[i].ColumnCount);
+
+            for (int j = 0; j < currentWeight.RowCount; j++)
+            {
+                for (int k = 0; k < currentWeight.ColumnCount; k++)
+                {
+                    currentWeight[j, k] = m_Weights[i][j, k];
+                }
+            }
+
+            newWeights.Add(currentWeight);
+        }
+
+        List<float> newBiases = new List<float>();
+        newBiases.AddRange(m_Biases);
+
+        nNet.m_Weights = newWeights;
+        nNet.m_Biases = newBiases;
+
+        nNet.InitializeHiddenLayers(hiddenLayerCount, hiddenNeuronCount);
+
+        return nNet;
+    }
+
+    public void InitializeHiddenLayers(int hiddenLayerCount, int hiddenNeuronCount)
+    {
+        m_InputLayer.Clear();
+        m_HiddenLayers.Clear();
+        m_OutputLayer.Clear();
+
+        for (int i = 0; i < hiddenLayerCount + 1; i++)
+        {
+            Matrix<float> newHiddenLayer = Matrix<float>.Build.Dense(1, hiddenNeuronCount); //Empty (like at the start)
+            m_HiddenLayers.Add(newHiddenLayer);
+        }
+    }
+
     private float Sigmoid(float x) // Curve between 0 & 1
     {
         return (1 / (1 + Mathf.Exp(-x)));
@@ -93,6 +137,9 @@ public class NeuralNetwork : MonoBehaviour
 
     public void SetFitness(float val) { m_Fitness = val; }
     public float GetFitness() { return m_Fitness; }
+
+    public List<Matrix<float>> GetWeights() { return m_Weights; }
+    public void SetWeights(List<Matrix<float>> weights) { m_Weights = weights; }
 
     private void ClearData()
     {

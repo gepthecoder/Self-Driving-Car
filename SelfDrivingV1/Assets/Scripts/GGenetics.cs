@@ -5,6 +5,8 @@ using UnityEngine;
 using MathNet.Numerics.LinearAlgebra;
 using System;
 
+using Random = UnityEngine.Random;
+
 public class GGenetics : MonoBehaviour
 {
     [SerializeField] private CarController m_CController;
@@ -80,6 +82,7 @@ public class GGenetics : MonoBehaviour
         } else
         {
             // Repopulate
+            Repopulate();
         }
     }
 
@@ -90,13 +93,109 @@ public class GGenetics : MonoBehaviour
         m_CurrentGeneration++;
         m_NaturallySelected = 0;
 
-        // sort the population by fitness (the higher the fitness the higher on the ggen pool)
-
+        // Sort the population by fitness (the higher the fitness the higher on the ggen pool)
         SortPopulation();
+
+        NeuralNetwork[] nNet = PickBestPopulation();
+
+        CrossoverPopulation(nNet);
+        MutatePopulation(nNet);
+    }
+
+    private void CrossoverPopulation(NeuralNetwork[] nNet)
+    {
+        for (int i = 0; i < m_NumberToCrossover; i+=2)
+        {
+            int firstParentIndex = i;
+            int secondParentIndex = i + 1;
+
+            if(m_GGenPool.Count >= 1)
+            {
+                for (int j = 0; j < 100; j++)
+                {
+                    firstParentIndex = m_GGenPool[Random.Range(0, m_GGenPool.Count)];
+                    secondParentIndex = m_GGenPool[Random.Range(0, m_GGenPool.Count)];
+
+                    if(firstParentIndex != secondParentIndex)
+                    {
+                        // we found potential parents
+                        break;
+                    }
+                }
+            }
+            NeuralNetwork child1 = new NeuralNetwork();
+            NeuralNetwork child2 = new NeuralNetwork();
+
+            child1.Init(m_CController.GetNNetworkLayersCount(), m_CController.GetNNetworkNeuronsCount());
+            child2.Init(m_CController.GetNNetworkLayersCount(), m_CController.GetNNetworkNeuronsCount());
+
+            child1.SetFitness(0);
+            child2.SetFitness(0);
+
+            // Swap over the entire weights of matrices
+            for (int k = 0; k < child1.GetWeights().Count; k++)
+            {
+                if(Random.Range(0.0f, 1.0f) < 0.5f)
+                {
+                    child1.GetWeights()[k] = m_Population[firstParentIndex].GetWeights()[k];
+                    child2.GetWeights()[k] = m_Population[secondParentIndex].GetWeights()[k];
+                }
+                else
+                {
+                    child2.GetWeights()[k] = m_Population[firstParentIndex].GetWeights()[k];
+                    child1.GetWeights()[k] = m_Population[secondParentIndex].GetWeights()[k];
+                }
+            }
+        }
+    }
+    private void MutatePopulation(NeuralNetwork[] nNet)
+    {
+        throw new NotImplementedException();
+    }
+
+
+    private NeuralNetwork[] PickBestPopulation()
+    {
+        NeuralNetwork[] newPopulation = new NeuralNetwork[m_InitialPopulation];
+
+        // Best Performers
+        for (int i = 0; i < m_BestAgentSelection; i++)
+        {
+            newPopulation[m_NaturallySelected] = m_Population[i].InitializeCopy(m_CController.GetNNetworkLayersCount(), m_CController.GetNNetworkNeuronsCount());
+            newPopulation[m_NaturallySelected].SetFitness(0);
+            m_NaturallySelected++;
+
+            int tempf = Mathf.RoundToInt(newPopulation[i].GetFitness() * 10);
+
+            for (int j = 0; j < tempf; j++)
+            {
+                // add index (instead of refs - memory efficieny) of the new population
+                m_GGenPool.Add(i);
+            }
+        }
+
+        // Worst Performers - inverse loop
+        for (int i = 0; i < m_WorstAgentSelection; i++)
+        {
+            int last = m_Population.Length - 1;
+            last -= i;
+
+            int tempf = Mathf.RoundToInt(newPopulation[last].GetFitness() * 10);
+
+            for (int j = 0; j < tempf; j++)
+            {
+                // add index (instead of refs - memory efficieny) of the new population
+                m_GGenPool.Add(last);
+            }
+        }
+
+        return newPopulation;
+
     }
 
     private void SortPopulation()
     {
+        // Quick Sort
         for (int i = 0; i < m_Population.Length; i++)
         {
             for (int j = i; j < m_Population.Length; j++)
