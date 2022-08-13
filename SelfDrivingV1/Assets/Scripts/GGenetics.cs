@@ -59,6 +59,11 @@ public class GGenetics : MonoBehaviour
         m_CController.ResetWithNNetwork(m_Population[m_CurrentGenome]);
     }
 
+    /// <summary>
+    /// Go through all the nets that aren't initialized yet (in the sense that they were not crosseover yet nor added as a best network)
+    /// </summary>
+    /// <param name="newPopulation"></param>
+    /// <param name="startingIndex"></param>
     private void RandomlyFillPopulation(NeuralNetwork[] newPopulation, int startingIndex)
     {
         while (startingIndex < m_InitialPopulation)
@@ -106,6 +111,13 @@ public class GGenetics : MonoBehaviour
 
         CrossoverPopulation(nNet);
         MutatePopulation(nNet);
+
+        RandomlyFillPopulation(nNet, m_NaturallySelected);
+
+        m_Population = nNet;
+
+        m_CurrentGenome = 0;
+        ResetToCurrentGenome();
     }
 
     /// <summary>
@@ -188,7 +200,6 @@ public class GGenetics : MonoBehaviour
     /// <param name="nNet"></param>
     private void MutatePopulation(NeuralNetwork[] nNet)
     {
-
         // Looping only through naturally selected population cuz the rest of the population wasn't even initialized yet so why would we mutate?
         for (int i = 0; i < m_NaturallySelected; i++)
         {
@@ -223,6 +234,11 @@ public class GGenetics : MonoBehaviour
         return newMatrix;
     }
 
+
+    /// <summary>
+    /// Tip: We dont wanna LOSE: sometimes we would find the best car that works amazing but through some crossover it can actually get worse. Ask yourselft Why Would you wanna lose that agent that did amazing ??
+    /// </summary>
+    /// <returns></returns>
     private NeuralNetwork[] PickBestPopulation()
     {
         NeuralNetwork[] newPopulation = new NeuralNetwork[m_InitialPopulation];
@@ -230,6 +246,8 @@ public class GGenetics : MonoBehaviour
         // Best Performers
         for (int i = 0; i < m_BestAgentSelection; i++)
         {
+            // assign the new population naturally selected to the best agent [transfering the best networks from the current generation over to the next generation unharmed]
+            // we dont wanna lose the best networks - so we are passing in the best networks
             newPopulation[m_NaturallySelected] = m_Population[i].InitializeCopy(m_CController.GetNNetworkLayersCount(), m_CController.GetNNetworkNeuronsCount());
             newPopulation[m_NaturallySelected].SetFitness(0);
             m_NaturallySelected++;
@@ -249,7 +267,9 @@ public class GGenetics : MonoBehaviour
             int last = m_Population.Length - 1;
             last -= i;
 
-            int tempf = Mathf.RoundToInt(newPopulation[last].GetFitness() * 10);
+            int tempf = Mathf.RoundToInt(m_Population[last].GetFitness() * 10);
+
+            // We are not increasing the natural selected cuz we are not bringing over the worst agents/genoms to the next gen
 
             for (int j = 0; j < tempf; j++)
             {

@@ -5,22 +5,16 @@ using UnityEngine;
 public class CarController : MonoBehaviour
 {
     [Header("C A R  A I  C O R E")]
-    [Space(50)]
     [SerializeField] private NeuralNetwork m_NNetwork;
-    [Space(10)]
     [Header("Network Options")]
     [SerializeField] private int m_Layers = 1;
     [SerializeField] private int m_Neurons = 10;
-    [Space(50)]
     [Header("Outputs")]
-    [Space(10)]
     [Range(-1, 1)]
     [SerializeField] private float m_Acceleration;
     [Range(-1, 1)]
     [SerializeField] private float m_Steering;
-    [Space(50)]
     [Header("Hidden Layer Options")]
-    [Space(10)]
     [Tooltip("Sensor Value Output Needs To Be Between 0-1")]
     [SerializeField] private int m_NormalizedFactor = 20;
     [SerializeField] private float m_TimeSinceStart = 0f; // checking for idle cars / usless cars -> Reset
@@ -33,7 +27,7 @@ public class CarController : MonoBehaviour
     [Tooltip("How important it is to stay in the middle of the track?")]
     [SerializeField] private float m_SensorMulti = 0.1f;
     [Space(10)]
-    [Tooltip("Beast")]
+    [Tooltip("Beast - Agent Did To GOOD")]
     [SerializeField] private float m_ChadVal = 2500;
 
     private Vector3 m_StartPosition; private Vector3 m_StartRotation;
