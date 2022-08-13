@@ -33,3 +33,6 @@ Example:
 Other factors that influence outcome:
 - Mutation Rates
 - Selecting the worst performers
+
+![cover](https://user-images.githubusercontent.com/38008294/184509415-8e7fbf2e-103c-4286-94ab-db9a5d1c64ec.JPG)
+
