@@ -70,13 +70,17 @@ public class GGenetics : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Go To Next Car In Out Current Generation
+    /// </summary>
+    /// <param name="fitness"></param>
+    /// <param name="nNet"></param>
     public void Death(float fitness, NeuralNetwork nNet)
     {
         if(m_CurrentGenome < m_Population.Length - 1)
         {
             m_Population[m_CurrentGenome].SetFitness(fitness);
 
-            // Go To Next Car In Out Current Generation
             m_CurrentGenome++;
             ResetToCurrentGenome();
         } else
@@ -86,6 +90,9 @@ public class GGenetics : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Sort the population by fitness (the higher the fitness the higher on the ggen pool)
+    /// </summary>
     private void Repopulate()
     {
         m_GGenPool.Clear();
@@ -93,7 +100,6 @@ public class GGenetics : MonoBehaviour
         m_CurrentGeneration++;
         m_NaturallySelected = 0;
 
-        // Sort the population by fitness (the higher the fitness the higher on the ggen pool)
         SortPopulation();
 
         NeuralNetwork[] nNet = PickBestPopulation();
@@ -102,6 +108,10 @@ public class GGenetics : MonoBehaviour
         MutatePopulation(nNet);
     }
 
+    /// <summary>
+    /// Pick the best and worst performers and cross them over.
+    /// </summary>
+    /// <param name="nNet"></param>
     private void CrossoverPopulation(NeuralNetwork[] nNet)
     {
         for (int i = 0; i < m_NumberToCrossover; i+=2)
@@ -169,11 +179,49 @@ public class GGenetics : MonoBehaviour
             m_NaturallySelected++;
         }
     }
+
+    /// <summary>
+    /// Mixing the Gen Pool -> Without it [if the initial population wasn't good -> no mather how many crossovers you do, you might never get a result that is satesfactory ----> WE DO MUTATIONS]
+    /// Mutation Rate is set to very LOW so we don't mutate that often ("good" ones aren't maybe that good)
+    /// sThe children are getting mutated
+    /// </summary>
+    /// <param name="nNet"></param>
     private void MutatePopulation(NeuralNetwork[] nNet)
     {
-        throw new NotImplementedException();
+
+        // Looping only through naturally selected population cuz the rest of the population wasn't even initialized yet so why would we mutate?
+        for (int i = 0; i < m_NaturallySelected; i++)
+        {
+            for (int j = 0; j < nNet[i].GetWeights().Count; j++)
+            {
+                if (Random.Range(0.0f, 1.0f) < m_MutationRate)
+                {
+                    nNet[i].GetWeights()[j] = MutateMatrix(nNet[i].GetWeights()[j]);
+                }
+            }
+        }
     }
 
+    private Matrix<float> MutateMatrix(Matrix<float> matrix)
+    {
+        //int randomPickingFactor = Random.Range(1, 9);
+
+        // Insert come random amount of values inside passed matrix to make them change
+        int randomPoints = Random.Range(1, (matrix.RowCount * matrix.ColumnCount) / 7);
+
+        Matrix<float> newMatrix = matrix;
+
+        for (int i = 0; i < randomPoints; i++)
+        {
+            int randomColumn = Random.Range(0, newMatrix.ColumnCount);
+            int randomRow = Random.Range(0, newMatrix.RowCount);
+
+            // Bumb Up or Down a bit
+            newMatrix[randomRow, randomColumn] = Mathf.Clamp(newMatrix[randomRow, randomColumn] + Random.Range(-1,1), -1f, 1f);
+        }
+
+        return newMatrix;
+    }
 
     private NeuralNetwork[] PickBestPopulation()
     {
