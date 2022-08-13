@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7063898106941219583}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Obsticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -52,7 +52,7 @@ GameObject:
   - component: {fileID: 554471650893157402}
   - component: {fileID: 915393916758549927}
   - component: {fileID: 8374659939401721473}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Track_Fence (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -148,7 +148,7 @@ GameObject:
   - component: {fileID: 1886740365024449242}
   - component: {fileID: 6865415331001984501}
   - component: {fileID: 5038801125220127812}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Track_Fence (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -244,7 +244,7 @@ GameObject:
   - component: {fileID: 1871333181588858115}
   - component: {fileID: 4403701405263980864}
   - component: {fileID: 840742191659062551}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Track_Fence (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -340,7 +340,7 @@ GameObject:
   - component: {fileID: 5238224155347835879}
   - component: {fileID: 5700006641626953064}
   - component: {fileID: 442531215726497376}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Track_Fence (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -436,7 +436,7 @@ GameObject:
   - component: {fileID: 1449184954019129357}
   - component: {fileID: 3744880805939666119}
   - component: {fileID: 1020915590932133829}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Track_Fence
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -532,7 +532,7 @@ GameObject:
   - component: {fileID: 2169067463426701938}
   - component: {fileID: 2154618807871017065}
   - component: {fileID: 4517664512590854920}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Track_Fence (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -628,7 +628,7 @@ GameObject:
   - component: {fileID: 4061660716810337846}
   - component: {fileID: 2563267747284565440}
   - component: {fileID: 4966467708272522134}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Track_Fence (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -723,7 +723,7 @@ GameObject:
   - component: {fileID: 7799817275002895544}
   - component: {fileID: 6598160386687480605}
   - component: {fileID: 8968259638824749015}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Track_CornerL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -806,7 +806,7 @@ GameObject:
   - component: {fileID: 5246088329714171355}
   - component: {fileID: 6364227624923412547}
   - component: {fileID: 5013126644176661655}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Track_Fence (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -902,7 +902,7 @@ GameObject:
   - component: {fileID: 8046076291339397906}
   - component: {fileID: 3663469250407755719}
   - component: {fileID: 7795101920943458677}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Track_Fence (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -998,7 +998,7 @@ GameObject:
   - component: {fileID: 3116572011716574017}
   - component: {fileID: 9055639454327336411}
   - component: {fileID: 1121741315918314442}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Track_Fence (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

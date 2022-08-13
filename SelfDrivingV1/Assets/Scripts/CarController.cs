@@ -41,10 +41,14 @@ public class CarController : MonoBehaviour
 
     private Vector3 m_Input;
 
+    private int m_LayerMask;
+
     private void Awake()
     {
         m_StartPosition = transform.position;
         m_StartRotation = transform.eulerAngles;
+
+        m_LayerMask = LayerMask.GetMask("Obsticles");
     }
 
     private void FixedUpdate()
@@ -132,14 +136,14 @@ public class CarController : MonoBehaviour
         Ray ray = new Ray(transform.position, rightDiagonal);
         RaycastHit rayHit;
 
-        if(Physics.Raycast(ray, out rayHit)) {
+        if(Physics.Raycast(ray, out rayHit, m_LayerMask)) {
             right_Sensor = rayHit.distance / m_NormalizedFactor; // NORMALs
             //print($"Right: {right_Sensor}");
             Debug.DrawLine(ray.origin, rayHit.point, Color.red);
         }
 
         ray.direction = forward;
-        if (Physics.Raycast(ray, out rayHit))
+        if (Physics.Raycast(ray, out rayHit, m_LayerMask))
         {
             forward_Sensor = rayHit.distance / m_NormalizedFactor; // NORMALs
             //print($"Forward: {forward_Sensor}");
@@ -147,7 +151,7 @@ public class CarController : MonoBehaviour
         }
 
         ray.direction = leftDiagonal;
-        if (Physics.Raycast(ray, out rayHit))
+        if (Physics.Raycast(ray, out rayHit, m_LayerMask))
         {
             left_Sensor = rayHit.distance / m_NormalizedFactor; // NORMALs
             //print($"Left: {left_Sensor }");
